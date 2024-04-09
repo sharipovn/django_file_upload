@@ -53,7 +53,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'file_upload_project.urls'
 LOGIN_REDIRECT_URL = 'all_uploaded_files' 
-LOGIN_URL = '/login/'
+LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = 'login'
 TEMPLATES = [
     {
