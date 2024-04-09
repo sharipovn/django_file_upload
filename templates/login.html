@@ -1,0 +1,50 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fayl Uzatish | Login</title>
+    <!-- Bootstrap CSS CDN -->
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'fontawesome/css/all.css' %}">
+</head>
+<body>
+    <div class="container mt-5 d-flex flex-column align-items-center">
+        <div class="card-body col-md-4 col-sm-12">
+            <img src="{% static 'icons/login.png' %}" alt="Login Page" width="400" class="mb-4 mt-5">
+            <h3 class="text-center text-secondary">Elektr Energiyasini Sotishni<br> Avtomatlashtirish Markazi Filiali</h3>
+            <form method="post" class="col-12  d-flex align-items-center flex-column" action="{% url 'login' %}">
+                {% csrf_token %}
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" style="font-size: 1rem; align-items: center;">
+                            <i class="fas fa-user" style="height: 1.5rem;"></i>
+                        </span>
+                    </div>
+                    <input type="text" name="username" class="form-control" placeholder="Foydalanuvchi" required>
+                </div>            
+                <!-- Display username field errors -->
+                {{ form.username.errors }}
+    
+                <!-- Password field with FontAwesome icon -->
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" style="font-size: 1rem; align-items: center;">
+                            <i class="fas fa-lock" style="height: 1.5rem;"></i>
+                        </span>
+                    </div>
+                    <input type="password" name="password" class="form-control" placeholder="Parol" required>
+                </div>
+                
+                <!-- Display password field errors -->
+                {{ form.password.errors }}
+                
+                <button class="btn btn-primary mt-3 col-12" type="submit">Kirish</button>
+            </form>
+        </div>
+    </div>
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+</body>
+</html>

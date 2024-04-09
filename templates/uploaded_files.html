@@ -1,0 +1,137 @@
+<!-- file_upload/templates/uploaded_files.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fayl Uzatish</title>
+    <!-- Bootstrap CSS CDN -->
+    {% comment %} <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> {% endcomment %}
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'fontawesome/css/all.css' %}">
+    <style>
+        .scroll-table-container {
+          max-height: 65vh; /* Set a max height for the container */
+          overflow-x: auto; /* Enable horizontal scrollbar */
+          overflow-y: auto; /* Enable vertical scrollbar */
+          scrollbar-width: thin;
+        }
+        th {
+          position: sticky;
+          top: 0;
+          z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-3">
+        <h2>Mening Yuklagan Fayllarim({{count}})</h2>
+        <a href="{% url 'all_uploaded_files' %}" class="btn btn-secondary mb-2"><i class="fas fa-arrow-circle-left"></i> Ortga</a> <!-- Link to all uploaded files page -->
+        <a href="{% url 'upload_file' %}" class="btn btn-primary mb-1"><i class="fas fa-upload"></i></a> <!-- Link to upload file page -->
+        <form method="get" class="mb-1  col-md-4 col-sm-12">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="Qidirish faylnomi ...">
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary">Qidirish</button>
+                </div>
+            </div>
+        </form>
+        <div class="scroll-table-container ">
+            <table class="table table-sm table-striped table-hover table-bordered border rounded">
+            <thead>
+                <tr class="table-primary text-primary text-center center-align" style="font-size:17px;white-space: nowrap;">
+                    <th scope="col">№</th>
+                    <th scope="col">FAYL</th>
+                    <th scope="col">COMMENT</th>
+                    <th scope="col">YUKLANGAN VAQTI</th>
+                    <th scope="col">HARAKAT</th>
+                </tr>
+            </thead>
+            <tbody class="text-center center-align" style="font-size:14px;">
+                {% for file in files %}
+                <tr>
+                    <td style="color:#090470;">{{ start_number|add:forloop.counter }}</td>
+                    <td  style="color:#090470;"><a href="{{ file.file.url }}" download>{{ file.file.name|slice:"8:" |truncatechars:40}}</a></td>
+                    <td  style="color:#090470;">{{ file.comment|default:"no comment"}}</td>
+                    <td  style="color:#090470;">{{ file.uploaded_at |date:"d/m/Y H:i"}}</td>
+                    <td style="color:#090470;">
+                        {% if file.user == request.user or request.user.is_superuser %}
+                            <form action="{% url 'delete_file' file.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fas fa-trash-alt"></i> <!-- FontAwesome trash icon -->
+                                </button>
+                            </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    </div>
+
+    <div class="container justify-content-center d-flex">
+        <div class="row justify-content-center mt-4">
+          <!-- Pagination -->
+          <nav aria-label="Page navigation example" class="mt-1">
+            <ul class="pagination justify-content-center">
+                {% if files.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="javascript:void(0);" onclick="navigateWithPage({{ files.previous_page_number }})">Oldingisi</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link">Oldingisi</a>
+                    </li>
+                {% endif %}
+      
+                {% for num in files.paginator.page_range %}
+                    {% if num == files.number %}
+                        <li class="page-item active">
+                            <a class="page-link" href="javascript:void(0);" onclick="navigateWithPage({{ num }})">{{ num }}</a>
+                        </li>
+                    {% else %}
+                        {% if num <= 3 or num > files.paginator.num_pages|add:'-3' or num == files.number|add:'-1' or num == files.number|add:'1' %}
+                            <li class="page-item">
+                                <a class="page-link" href="javascript:void(0);" onclick="navigateWithPage({{ num }})">{{ num }}</a>
+                            </li>
+                        {% elif num == 4 or num == files.paginator.num_pages|add:'-4' %}
+                            <li class="page-item disabled">
+                                <a class="page-link">...</a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+      
+                {% if files.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="javascript:void(0);" onclick="navigateWithPage({{files.next_page_number}})">Keyingisi</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link">Keyingisi</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+        <!-- Pagination -->
+      </div>
+      </div>
+      <script>
+        function navigateWithPage(pageNumber) {
+            var currentURL = window.location.href;
+            var newURL = currentURL.replace(/[\?&]page=\d+/i, '');
+            if (newURL.indexOf('?') === -1) {
+                newURL += '?';
+            } else {
+                newURL += '&';
+            }
+            newURL += 'page=' + pageNumber;
+            window.location.href = newURL;
+        }
+      </script>
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+</body>
+</html>
