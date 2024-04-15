@@ -86,3 +86,12 @@ def delete_file(request, file_id):
     if request.user == file.user or request.user.is_superuser:
         file.delete()
     return redirect('uploaded_files')
+
+
+
+@login_required
+def delete_file_from_all(request, file_id):
+    file = get_object_or_404(UploadedFile, pk=file_id)
+    if request.user == file.user or request.user.is_superuser:
+        file.delete()
+    return redirect('all_uploaded_files')

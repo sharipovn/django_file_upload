@@ -58,7 +58,9 @@
                     <th scope="col">№</th>
                     <th scope="col">YUKLAGAN</th>
                     <th scope="col">FAYL</th>
+                    <th scope="col">O'LCHAMI</th>
                     <th scope="col">KOMMENT</th>
+                    <th scope="col">RUXSAT</th>
                     <th scope="col">VAQTI</th>
                     <th scope="col">HARAKAT</th>
                 </tr>
@@ -68,12 +70,20 @@
                 <tr>
                     <td style="color:#090470;">{{ start_number|add:forloop.counter }}</td>
                     <td style="color:#090470;">{{ file.user.username|upper }}</td>
-                    <td style="color:#090470;"><a href="{{ file.file.url }}" download>{{ file.file.name|slice:"8:" |truncatechars:40}}</a></td>
-                    <td  style="color:#090470;">{{ file.comment|default:"no comment"}}</td>
+                    <td style="color:#090470;"><a href="{{ file.file.url }}" download  style="text-decoration: none;">{{ file.file.name|slice:"8:" |truncatechars:40}}</a></td>
+                    <td  style="color:#090470;">{{ file.file.size|filesizeformat }}</td>
+                    <td  style="color:#090470;">{{ file.comment|default:" - "}}</td>
+                    <td class="text-danger">
+                        {% if request.user.is_superuser or request.user in file.allowed_users.all %}
+                        <i class="fas fa-check-circle"></i>
+                        {% else %}
+                        <i class="fas fa-times-circle"></i>
+                        {% endif %}
+                    </td>
                     <td style="color:#090470;">{{ file.uploaded_at|date:"d/m/Y H:i" }}</td>
                     <td style="color:#090470;">
                         {% if file.user == request.user or request.user.is_superuser %}
-                            <form action="{% url 'delete_file' file.id %}" method="post">
+                            <form action="{% url 'delete_file_from_all' file.id %}" method="post">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-danger">
                                     <i class="fas fa-trash-alt"></i> <!-- FontAwesome trash icon -->

@@ -43,6 +43,7 @@
                 <tr class="table-primary text-primary text-center center-align" style="font-size:17px;white-space: nowrap;">
                     <th scope="col">№</th>
                     <th scope="col">FAYL</th>
+                    <th scope="col">O'LCHAMI</th>
                     <th scope="col">COMMENT</th>
                     <th scope="col">YUKLANGAN VAQTI</th>
                     <th scope="col">HARAKAT</th>
@@ -53,6 +54,7 @@
                 <tr>
                     <td style="color:#090470;">{{ start_number|add:forloop.counter }}</td>
                     <td  style="color:#090470;"><a href="{{ file.file.url }}" download>{{ file.file.name|slice:"8:" |truncatechars:40}}</a></td>
+                    <td  style="color:#090470;">{{ file.file.size|filesizeformat }}</td>
                     <td  style="color:#090470;">{{ file.comment|default:"no comment"}}</td>
                     <td  style="color:#090470;">{{ file.uploaded_at |date:"d/m/Y H:i"}}</td>
                     <td style="color:#090470;">
