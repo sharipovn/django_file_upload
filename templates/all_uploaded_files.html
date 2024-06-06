@@ -6,10 +6,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'icons/banan.png' %}" type="image/x-icon">
     <title>Fayl Uzatish</title>
     <!-- Bootstrap CSS CDN -->
     <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{% static 'fontawesome/css/all.css' %}">
+    
 
     <style>
         .scroll-table-container {
@@ -29,7 +31,7 @@
 <body>
     <div class="container mt-3">
         
-        <div class="text-center"><img src="{% static 'icons/home.png' %}" alt="Login Page" height="70" class="mb-2 col-4"></div>
+        <div class="text-center"><img src="{% static 'icons/banan.png' %}" alt="Login Page" height="250"  class="mb-2 col-4"></div>
         <i class="fas fa-user-circle" ></i> {{request.user}}<h2>Barcha Yuklangan Fayllar({{count}})</h2>
         <div class="row">
             <div class="col-md-6 mb-1">
